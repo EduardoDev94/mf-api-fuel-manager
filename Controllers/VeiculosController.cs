@@ -14,6 +14,7 @@ namespace mf_api_fuel_manager.Controllers
         {
             _context = context;
         }
+        
         [HttpGet]
         public async Task<ActionResult> GetAll()
         {
@@ -22,33 +23,42 @@ namespace mf_api_fuel_manager.Controllers
         }
 
         [HttpPost]
-        
         public async Task<ActionResult> Create(Veiculo model)
         {
-            if (model.AnoFabricacao <= 0 || model.AnoModelo <= 0) 
+            if (model.AnoFabricacao <= 0 || model.AnoModelo <= 0)
             {
                 return BadRequest(new { message = "Ano de fabricação e ano de modelo são obrigatórios e devem ser maior que 0" });
             }
             _context.Veiculos.Add(model);
             await _context.SaveChangesAsync();
+<<<<<<< HEAD
             
             return CreatedAtAction("GetById", new {id = model.Id}, model); // método para criar objetos sendo os parâmetro
+=======
+            return CreatedAtAction("GetById", new { id = model.Id }, model); // método para criar objetos sendo os parâmetro
+>>>>>>> 61f105ba4feed0a5f41ab685ce12e359526a1be3
         }
+
         [HttpGet("{id}")]
         public async Task<ActionResult> GetById(int id)
         {
             var model = await _context.Veiculos
                 .Include(t => t.Consumos)
                 .FirstOrDefaultAsync(c => c.Id == id);
+<<<<<<< HEAD
 
             if (model == null) return NotFound();
 
             GerarLinks(model);
             return Ok(model);   
+=======
+            if (model == null) return NotFound();
+            return Ok(model);
+>>>>>>> 61f105ba4feed0a5f41ab685ce12e359526a1be3
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update (int id, Veiculo model)
+        public async Task<ActionResult> Update(int id, Veiculo model)
         {
             if (id != model.Id) BadRequest();
             var modeloDb = await _context.Veiculos.AsNoTracking()
@@ -61,6 +71,7 @@ namespace mf_api_fuel_manager.Controllers
 
             return NoContent();
         }
+
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
@@ -73,7 +84,6 @@ namespace mf_api_fuel_manager.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
-
         }
 
         private void GerarLinks (Veiculo model )
@@ -83,6 +93,7 @@ namespace mf_api_fuel_manager.Controllers
             model.Links.Add(new LinkDto(model.Id, Url.ActionLink(), rel: "delete", metodo: "Delete"));
 
         }
+
 
     }
 }
