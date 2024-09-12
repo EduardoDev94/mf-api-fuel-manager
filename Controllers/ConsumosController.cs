@@ -10,10 +10,12 @@ namespace mf_api_fuel_manager.Controllers
     public class ConsumosController : ControllerBase
     {
         private readonly AppDbContext _context;
+
         public ConsumosController(AppDbContext context)
         {
             _context = context;
         }
+
         [HttpGet]
         public async Task<ActionResult> GetAll()
         {
@@ -49,7 +51,6 @@ namespace mf_api_fuel_manager.Controllers
             var modeloDb = await _context.Consumos.AsNoTracking()
                 .FirstOrDefaultAsync(c => c.Id == id);
 
-            if (modeloDb == null) return NotFound();
 
             _context.Consumos.Update(model);
             await _context.SaveChangesAsync();
@@ -57,6 +58,7 @@ namespace mf_api_fuel_manager.Controllers
 
             return NoContent();
         }
+
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
