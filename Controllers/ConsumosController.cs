@@ -7,76 +7,71 @@ namespace mf_api_fuel_manager.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class VeiculosController : ControllerBase
+    public class ConsumosController : ControllerBase
     {
         private readonly AppDbContext _context;
-        public VeiculosController(AppDbContext context)
+        public ConsumosController(AppDbContext context)
         {
             _context = context;
         }
         [HttpGet]
         public async Task<ActionResult> GetAll()
         {
-            var model = await _context.Veiculos.ToListAsync();
+            var model = await _context.Consumos.ToListAsync();
             return Ok(model);
         }
 
         [HttpPost]
-        
-        public async Task<ActionResult> Create(Veiculo model)
+
+        public async Task<ActionResult> Create(Consumo model)
         {
-            if (model.AnoFabricacao <= 0 || model.AnoModelo <= 0) 
-            {
-                return BadRequest(new { message = "Ano de fabricação e ano de modelo são obrigatórios e devem ser maior que 0" });
-            }
-            _context.Veiculos.Add(model);
+            _context.Consumos.Add(model);
             await _context.SaveChangesAsync();
-            
-            return CreatedAtAction("GetById", new {id = model.Id}, model); // método para criar objetos sendo os parâmetro
+            return CreatedAtAction("GetById", new { id = model.Id }, model); // método para criar objetos sendo os parâmetro
         }
         [HttpGet("{id}")]
         public async Task<ActionResult> GetById(int id)
         {
-            var model = await _context.Veiculos
-                .Include(t => t.Consumos)
+            var model = await _context.Consumos
                 .FirstOrDefaultAsync(c => c.Id == id);
 
             if (model == null) return NotFound();
 
             GerarLinks(model);
-            return Ok(model);   
+
+            return Ok(model);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update (int id, Veiculo model)
+        public async Task<ActionResult> Update(int id, Consumo model)
         {
             if (id != model.Id) BadRequest();
-            var modeloDb = await _context.Veiculos.AsNoTracking()
+            var modeloDb = await _context.Consumos.AsNoTracking()
                 .FirstOrDefaultAsync(c => c.Id == id);
 
             if (modeloDb == null) return NotFound();
 
-            _context.Veiculos.Update(model);
+            _context.Consumos.Update(model);
             await _context.SaveChangesAsync();
+
 
             return NoContent();
         }
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var model = await _context.Veiculos.FindAsync(id);
+            var model = await _context.Consumos.FindAsync(id);
 
             if (model == null) return NotFound();
 
-            _context.Veiculos.Remove(model);
+            _context.Consumos.Remove(model);
 
             await _context.SaveChangesAsync();
 
             return NoContent();
 
         }
-
-        private void GerarLinks (Veiculo model )
+        private void GerarLinks(Consumo model)
         {
             model.Links.Add(new LinkDto(model.Id, Url.ActionLink(), rel: "self", metodo: "GET"));
             model.Links.Add(new LinkDto(model.Id, Url.ActionLink(), rel: "update", metodo: "PUT"));
