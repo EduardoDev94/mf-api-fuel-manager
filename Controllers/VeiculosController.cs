@@ -31,12 +31,10 @@ namespace mf_api_fuel_manager.Controllers
             }
             _context.Veiculos.Add(model);
             await _context.SaveChangesAsync();
-<<<<<<< HEAD
             
             return CreatedAtAction("GetById", new {id = model.Id}, model); // método para criar objetos sendo os parâmetro
-=======
-            return CreatedAtAction("GetById", new { id = model.Id }, model); // método para criar objetos sendo os parâmetro
->>>>>>> 61f105ba4feed0a5f41ab685ce12e359526a1be3
+
+
         }
 
         [HttpGet("{id}")]
@@ -45,16 +43,13 @@ namespace mf_api_fuel_manager.Controllers
             var model = await _context.Veiculos
                 .Include(t => t.Consumos)
                 .FirstOrDefaultAsync(c => c.Id == id);
-<<<<<<< HEAD
+
 
             if (model == null) return NotFound();
 
             GerarLinks(model);
             return Ok(model);   
-=======
-            if (model == null) return NotFound();
-            return Ok(model);
->>>>>>> 61f105ba4feed0a5f41ab685ce12e359526a1be3
+
         }
 
         [HttpPut("{id}")]
