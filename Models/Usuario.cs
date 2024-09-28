@@ -14,6 +14,7 @@ namespace mf_api_fuel_manager.Models
        
         public Perfil Perfil { get; set; }
 
+        public ICollection<VeiculoUsuario> Veiculos { get; set; }
 
     }
     public enum Perfil
